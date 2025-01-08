@@ -11,7 +11,7 @@ if [ $? != 0 ]; then
   tmux new-session -d -s $SESSION_NAME -n main
   
   # Left Pane (YubiKey Manager)
-  tmux send-keys -t $SESSION_NAME "bash /Users/JJ/Documents/Projects/yubikey-manager/key_manager.sh" C-m
+  tmux send-keys -t $SESSION_NAME "bash ~/Documents/Projects/yubikey-manager/key_manager.sh" C-m
 
   # Split horizontally into top and bottom right panes
   tmux split-window -h -t $SESSION_NAME
