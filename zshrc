@@ -88,7 +88,7 @@ echo "[$(date)] - History settings applied" >> "$LOG_FILE"
 # -------------------------
 echo "Welcome, $(whoami)! Terminal ready at $(date +'%Y-%m-%d %H:%M:%S')."
 echo "[$(date)] - Greeting displayed" >> "$LOG_FILE"
-
+echo ""
 cat << "EOF"
   /$$$$$$$$ /$$$$$$   /$$$$$$  /$$   /$$  /$$$$$$ 
 | $$_____//$$__  $$ /$$__  $$| $$  | $$ /$$__  $$
