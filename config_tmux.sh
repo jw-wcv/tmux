@@ -3,6 +3,8 @@
 CURRENT_DIR=$(pwd)
 ZSHRC_SOURCE="$CURRENT_DIR/zshrc"
 ZSHRC_TARGET="$HOME/.zshrc"
+TMUX_CONF_SOURCE="$CURRENT_DIR/tmux.conf"
+TMUX_CONF_TARGET="$HOME/.tmux.conf"
 BACKUP_NAME=".zshrc.backup.$(date +%Y%m%d%H%M%S)"
 BACKUP_PATH="$CURRENT_DIR/backups/$BACKUP_NAME"
 
@@ -50,6 +52,17 @@ if [[ "$response" =~ ^[Yy] ]]; then
         echo "Error: zshrc file not found in the current directory."
         exit 1
     fi
+
+    # Overwrite ~/.tmux.conf with tmux.conf from the current directory
+    if [ -f "$TMUX_CONF_SOURCE" ]; then
+        echo "Overwriting ~/.tmux.conf with $TMUX_CONF_SOURCE..."
+        cp "$TMUX_CONF_SOURCE" "$TMUX_CONF_TARGET"
+        echo "Tmux configuration updated successfully."
+    else
+        echo "Error: tmux.conf file not found in the current directory."
+        exit 1
+    fi
+
 
     # Reload Zsh configuration
     echo "Reloading Zsh configuration..."
