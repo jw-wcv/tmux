@@ -4,7 +4,7 @@ CURRENT_DIR=$(pwd)
 ZSHRC_SOURCE="$CURRENT_DIR/zshrc"
 ZSHRC_TARGET="$HOME/.zshrc"
 BACKUP_NAME=".zshrc.backup.$(date +%Y%m%d%H%M%S)"
-BACKUP_PATH="$CURRENT_DIR/$BACKUP_NAME"
+BACKUP_PATH="$CURRENT_DIR/backups/$BACKUP_NAME"
 
 if ! command -v brew &>/dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
