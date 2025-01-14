@@ -34,8 +34,13 @@ alias ....='cd ../../..'
 echo "[$(date)] - Navigation aliases loaded" >> "$LOG_FILE"
 
 # -------------------------
-# Tmux Auto-start (Entry Point)
+# Configurable Tmux Auto-start
 # -------------------------
+
+# Enable or disable tmux auto-start
+ENABLE_TMUX_AUTO_START=true  # Change to "false" to disable tmux auto-start
+
+# Tmux Auto-start (Entry Point)
 if [ -z "$TMUX" ]; then
     if [ -f ~/Documents/Projects/tmux/tmux_launcher.sh ]; then
         echo "[$(date)] - Tmux launcher found. Running..." >> "$LOG_FILE"
@@ -45,15 +50,33 @@ if [ -z "$TMUX" ]; then
     fi
 fi
 
-# -------------------------
-# Tmux Session Persistence
-# -------------------------
-if [ -z "$TMUX" ]; then
-    echo "[$(date)] - No active tmux session. Attaching or creating new one." >> "$LOG_FILE"
-    tmux attach || tmux new-session
-    echo "[$(date)] - Tmux session attached or created" >> "$LOG_FILE"
+# Tmux Session Persistence and Improved Logic
+tmux_auto_start() {
+    # Prevent nested tmux sessions
+    if [ -z "$TMUX" ]; then
+        echo "[$(date)] - No active tmux session detected." >> "$LOG_FILE"
+        
+        # Prompt user for whether to start or skip tmux
+        read -q "use_tmux?Start a new tmux session? (y/n): "
+        echo  # Move to a new line after user input
+        
+        if [[ "$use_tmux" =~ ^[Yy]$ ]]; then
+            # Attach to the "default" session if it exists, or create a new one
+            tmux new-session -A -s default
+            echo "[$(date)] - Attached to or created 'default' tmux session." >> "$LOG_FILE"
+        else
+            echo "[$(date)] - User opted to skip tmux session." >> "$LOG_FILE"
+        fi
+    else
+        echo "[$(date)] - Already inside a tmux session. Skipping auto-start." >> "$LOG_FILE"
+    fi
+}
+
+# Call the tmux auto-start function if enabled
+if [ "$ENABLE_TMUX_AUTO_START" = true ]; then
+    tmux_auto_start
 else
-    echo "[$(date)] - Tmux session already active" >> "$LOG_FILE"
+    echo "[$(date)] - Tmux auto-start is disabled." >> "$LOG_FILE"
 fi
 
 # -------------------------
@@ -83,6 +106,7 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 echo "[$(date)] - History settings applied" >> "$LOG_FILE"
 
+
 # -------------------------
 # Greeting (Optional)
 # -------------------------
@@ -102,3 +126,4 @@ EOF
 echo ""
 echo ""
 echo "[$(date)] - ASCII art rendered" >> "$LOG_FILE"
+
