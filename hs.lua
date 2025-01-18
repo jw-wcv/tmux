@@ -215,6 +215,7 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
     restoreWindowPositions()
 end)
 
+--[[
 ------------------------------------------------------------
 -- HTTP Command Server on Port 8888 (Singleton API)
 ------------------------------------------------------------
@@ -260,3 +261,5 @@ else
     hs.alert.show("HTTP command server configured on port 8888 (auto-started)")
     logger.i("HTTP command server configured on port 8888; no start() method found, assuming auto-start")
 end
+]]--
+
