@@ -1,0 +1,98 @@
+# Local Project Setup for Enhanced Zsh and Tmux Scripts
+
+This repository contains your custom shell configuration and several Tmux helper scripts designed to streamline your development workflow. The project includes:
+
+- **.zshrc** – Your main Zsh configuration file that:
+  - Sets up the PATH, default editor, language, logging, aliases, and prompt customization.
+  - Provides a `wd` function to jump back to the top-level directory in key folders.
+  - Offers a custom prompt for choosing between a Tmux session or a normal terminal on startup.
+  - Contains logic to launch your custom Tmux launcher (if available) or fall back to a default Tmux session.
+  - Overrides the `wc -h` command to display your custom help information.
+
+- **tmux_launcher.sh** – A Tmux launcher script that:
+  - Sets up terminal and Tmux options (like 256‑color support and terminal overrides).
+  - Displays a centered welcome banner with dynamic text.
+  - Scans the tmux scripts directory (excluding certain files) and displays a dynamic menu.
+  - Prompts you to select a Tmux session script to launch.
+
+- **ocli** – A script for an **Optimized CLI** session that:
+  - Checks if an “optimized_cli” session exists.
+  - If it exists, prompts you to either attach to the existing session or create a new session (with a unique timestamp appended).
+  - Applies several environment and visual tweaks (e.g., mouse support, key bindings, and pane settings).
+  
+- **ssh** – A script to manage your **SSH Tmux** session for key management that:
+  - Checks if an “ssh” session exists.
+  - If it does, prompts you to attach to the existing session or create a new one.
+  - Sets up a three-pane layout with:
+    - A left pane running your YubiKey manager.
+    - A top right pane running Midnight Commander (`mc`).
+    - A bottom right pane running the resource monitor (`btm`).
+
+- **workspace** – A script for your **Daily Coding and Monitoring** layout that:
+  - Checks for an existing “workspace” session.
+  - If it exists, prompts you to either attach to it or create a new one.
+  - Creates a session with:
+    - A top full pane for coding (launching `nvim`).
+    - A vertically split bottom half where:
+      - The bottom left pane runs system monitoring (`btm`).
+      - The bottom right pane (further split horizontally) shows a file browser (`mc`) and an additional shell pane (`zsh`).
+
+## Files and Functions
+
+### .zshrc
+
+- **Path and Environment:**  
+  Sets up your `$PATH`, `$EDITOR`, logging to `~/zsh_debug.log`, and environment variables.
+  
+- **Aliases:**  
+  Defines shortcuts like `ll`, `gs`, `gc`, `gp`, `update`, `cls`, `dev`, and navigation aliases (`..`, `...`, `....`).
+
+- **`wd` Function:**  
+  The `wd_func` checks if your current directory is underneath one of the key directories (e.g., `~/Documents`, `~/Projects`, `~/Etc`) and jumps to the top-level folder if possible.
+  
+- **Tmux Mode Prompt:**  
+  If you’re not already inside a Tmux session, the script prompts you to choose between:
+  1. A Tmux session (which triggers either your custom `tmux_launcher.sh` or attaches/creates a “default” session)
+  2. A normal terminal session  
+  (If you’re inside Tmux, it automatically forces `TERMINAL_MODE` to “tmux” and skips the prompt.)
+
+- **Prompt Customization, Plugins, and History:**  
+  The configuration sets up a colorful prompt, initializes completions, and customizes history behavior.
+
+- **Custom `wc -h` Help:**  
+  Overrides the normal `wc -h` to display a list of available aliases and custom functions.
+
+### tmux_launcher.sh
+
+- Sets terminal options to force 256‑color support.
+- Contains functions (like `center_text`, `strip_colors`, and `center_menu_item`) to dynamically center text and menus.
+- Displays a welcome banner and then scans the `$TMUX_DIR` (e.g., `~/Documents/Projects/tmux`) for Tmux session scripts (excluding itself and other specified files).
+- Prompts you to select a Tmux session to launch from the list.
+
+### ocli
+
+- Checks if a Tmux session named “optimized_cli” exists.
+- If it does, it prompts whether to attach to the existing session or create a new one (with a unique name, e.g., `optimized_cli_1674053437`).
+- Applies environment tweaks, key bindings, and visual settings, then attaches you to the chosen session.
+
+### ssh
+
+- Checks for an existing Tmux session named “ssh.”
+- If one exists, it asks if you want to attach to that session or create a new one (e.g., `ssh_<timestamp>`).
+- Sets up a pane layout with a YubiKey manager in the left pane, Midnight Commander in the top right, and a resource monitor in the bottom right.
+
+### workspace
+
+- Checks for an existing “workspace” session.
+- If one exists, prompts you to attach or create a new session.
+- Creates a layout with:
+  - A top full pane running `nvim` for coding.
+  - A bottom area split vertically with `btm`, `mc`, and an extra shell pane (`zsh`).
+
+## Installation
+
+1. **Back Up Your Existing Configurations:**  
+   If you have an existing `~/.zshrc` or other custom scripts, make sure to back them up.
+
+2. **Update Your Local Project Directory:**  
+   Copy all the provided files into your local project directory. You might structure it like this:

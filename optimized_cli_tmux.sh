@@ -1,45 +1,96 @@
-# Ultimate Single Pane CLI w/ Mouse Support 
-
 #!/bin/bash
+#
+# Ultimate Single Pane CLI w/ Mouse Support 
+#
 
-SESSION_NAME="optimized_cli"
+BASE_SESSION_NAME="optimized_cli"
 
-# Start a new tmux session or attach if it already exists
-tmux has-session -t $SESSION_NAME 2>/dev/null
+# Check if the base session "optimized_cli" already exists
+tmux has-session -t "$BASE_SESSION_NAME" 2>/dev/null
+if [ $? -eq 0 ]; then
+  # The session exists; prompt user to attach or create new
+  echo "Session '$BASE_SESSION_NAME' already exists."
+  echo -n "Attach to existing session (a) or create a new session (n)? [a/n]: "
+  read -r CHOICE
 
-if [ $? != 0 ]; then
-  # Create new tmux session
-  tmux new-session -d -s $SESSION_NAME
+  if [[ "$CHOICE" =~ ^[Nn]$ ]]; then
+    # Create a new session with a unique name, e.g. "optimized_cli_1674053437"
+    NEW_SESSION_NAME="${BASE_SESSION_NAME}_$(date +%s)"
+    echo "Creating a new session named '$NEW_SESSION_NAME'..."
 
-  # Set up environment tweaks for clarity and productivity
-  tmux set-option -g status off                     # Remove status bar for clean view
-  tmux set-option -g mouse on                       # Enable mouse support for scroll
-  tmux set-option -g history-limit 100000           # Large scrollback for reviewing
-  tmux set-option -g renumber-windows on            # Renumber windows dynamically
-  tmux set-option -g automatic-rename on            # Rename windows by active process
-  tmux set-option -g pane-border-status off         # Hide borders
-  tmux set-option -g set-titles on                  # Show session name in terminal title
-  tmux set-option -g display-panes-time 1000        # Longer display time when switching panes
-  tmux set-option -g aggressive-resize on           # Resize based on terminal changes
+    # Create the new session (detached)
+    tmux new-session -d -s "$NEW_SESSION_NAME"
 
-  # Visual tweaks for enhanced readability
-  tmux set-option -g status-bg black                # Dark status bar background
-  tmux set-option -g status-fg green                # Green text for status
-  tmux set-option -g status-left " CLI Session "    # Static left status
-  tmux set-option -g message-style bg=black,fg=green # Green popup messages
-  tmux set-option -g pane-active-border-style fg=green # Highlight active pane in green
+    # Session-specific environment tweaks
+    tmux set-option -t "$NEW_SESSION_NAME" -g status off
+    tmux set-option -t "$NEW_SESSION_NAME" -g mouse on
+    tmux set-option -t "$NEW_SESSION_NAME" -g history-limit 100000
+    tmux set-option -t "$NEW_SESSION_NAME" -g renumber-windows on
+    tmux set-option -t "$NEW_SESSION_NAME" -g automatic-rename on
+    tmux set-option -t "$NEW_SESSION_NAME" -g pane-border-status off
+    tmux set-option -t "$NEW_SESSION_NAME" -g set-titles on
+    tmux set-option -t "$NEW_SESSION_NAME" -g display-panes-time 1000
+    tmux set-option -t "$NEW_SESSION_NAME" -g aggressive-resize on
 
-  # Keybindings
-  tmux bind r source-file ~/.tmux.conf \; display-message "Config Reloaded!"  # Reload config
-  tmux bind-key h split-window -h                                              # Horizontal split
-  tmux bind-key v split-window -v                                              # Vertical split
-  tmux bind-key c new-window                                                   # New window
-  tmux bind-key k kill-pane                                                    # Kill pane
-  tmux bind-key Space next-layout                                              # Switch layouts
-  
-  # Start in normal CLI
-  tmux send-keys -t $SESSION_NAME "clear" C-m
+    # Visual tweaks
+    tmux set-option -t "$NEW_SESSION_NAME" -g status-bg black
+    tmux set-option -t "$NEW_SESSION_NAME" -g status-fg green
+    tmux set-option -t "$NEW_SESSION_NAME" -g status-left " CLI Session "
+    tmux set-option -t "$NEW_SESSION_NAME" -g message-style bg=black,fg=green
+    tmux set-option -t "$NEW_SESSION_NAME" -g pane-active-border-style fg=green
+
+    # Keybindings (applied globally, rather than session-specific)
+    tmux bind-key r "source-file ~/.tmux.conf; display-message 'Config Reloaded!'"
+    tmux bind-key h split-window -h
+    tmux bind-key v split-window -v
+    tmux bind-key c new-window
+    tmux bind-key k kill-pane
+    tmux bind-key Space next-layout
+
+    # Start in a normal CLI
+    tmux send-keys -t "$NEW_SESSION_NAME" "clear" C-m
+
+    # Attach to new session
+    tmux attach -t "$NEW_SESSION_NAME"
+    exit 0
+  else
+    # Attach to existing "optimized_cli"
+    tmux attach -t "$BASE_SESSION_NAME"
+    exit 0
+  fi
+else
+  # "optimized_cli" does NOT exist, so create it
+  tmux new-session -d -s "$BASE_SESSION_NAME"
+
+  # Session-specific environment tweaks
+  tmux set-option -t "$BASE_SESSION_NAME" -g status off
+  tmux set-option -t "$BASE_SESSION_NAME" -g mouse on
+  tmux set-option -t "$BASE_SESSION_NAME" -g history-limit 100000
+  tmux set-option -t "$BASE_SESSION_NAME" -g renumber-windows on
+  tmux set-option -t "$BASE_SESSION_NAME" -g automatic-rename on
+  tmux set-option -t "$BASE_SESSION_NAME" -g pane-border-status off
+  tmux set-option -t "$BASE_SESSION_NAME" -g set-titles on
+  tmux set-option -t "$BASE_SESSION_NAME" -g display-panes-time 1000
+  tmux set-option -t "$BASE_SESSION_NAME" -g aggressive-resize on
+
+  # Visual tweaks
+  tmux set-option -t "$BASE_SESSION_NAME" -g status-bg black
+  tmux set-option -t "$BASE_SESSION_NAME" -g status-fg green
+  tmux set-option -t "$BASE_SESSION_NAME" -g status-left " CLI Session "
+  tmux set-option -t "$BASE_SESSION_NAME" -g message-style bg=black,fg=green
+  tmux set-option -t "$BASE_SESSION_NAME" -g pane-active-border-style fg=green
+
+  # Keybindings (applied globally, not session-specific)
+  tmux bind-key r "source-file ~/.tmux.conf; display-message 'Config Reloaded!'"
+  tmux bind-key h split-window -h
+  tmux bind-key v split-window -v
+  tmux bind-key c new-window
+  tmux bind-key k kill-pane
+  tmux bind-key Space next-layout
+
+  # Start in a normal CLI
+  tmux send-keys -t "$BASE_SESSION_NAME" "clear" C-m
+
+  # Attach
+  tmux attach -t "$BASE_SESSION_NAME"
 fi
-
-# Attach to the session
-tmux attach-session -t $SESSION_NAME
