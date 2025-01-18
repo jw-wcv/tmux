@@ -10,6 +10,17 @@ export PATH="$HOME/bin:$PATH:/usr/local/sbin"         # Add personal bin and sbi
 export EDITOR='vim'                                   # Set default editor
 export LANG=en_US.UTF-8                               # Language and encoding
 
+# Pyenv Initialization
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv >/dev/null 2>&1; then
+    eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+fi
+if command -v pyenv-virtualenv-init >/dev/null 2>&1; then
+    eval "$(pyenv virtualenv-init -)"
+fi
+
 LOG_FILE=~/zsh_debug.log
 echo "[$(date)] - Zsh configuration loaded" >> "$LOG_FILE"
 
@@ -23,6 +34,8 @@ alias gp='git push'
 alias update='brew update && brew upgrade'
 alias cls='clear'
 alias dev='cd ~/Documents/Projects'
+alias pip="python3 -m pip"
+
 
 echo "[$(date)] - Aliases loaded" >> "$LOG_FILE"
 
