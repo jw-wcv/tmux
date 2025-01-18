@@ -30,6 +30,10 @@ arch -arm64 brew install wtfutil
 arch -arm64 brew install nethack
 arch -arm64 brew install kubectl
 arch -arm64 brew install ctop
+arch -arm64 brew install pyenv pyenv-virtualenv
+arch -arm64 brew install openssl readline zlib xz
+
+
 
 # Prompt user for confirmation
 echo "Do you want to update your ~/.zshrc file? (yes/no)"
