@@ -1,3 +1,5 @@
+-- fileName: init.lua
+
 ------------------------------------------------------------
 -- Configuration and Logger
 ------------------------------------------------------------
@@ -55,7 +57,7 @@ local function fetchVSCodeProjectPath()
     end
 end
 
--- Saves the current state (geometry and extra info) for each visible window.
+-- Saves the current state (geometry and extra info) for each visible window, including Cursor IDE.
 local function saveWindowPositions()
     local allWindows = hs.window.allWindows()
     local windowData = {}
@@ -94,6 +96,12 @@ local function saveWindowPositions()
                     end
                 end
 
+                -- Special handling for Cursor IDE
+                if appName == "Cursor" then
+                    -- Add any specific data you want to save for Cursor IDE
+                    -- For example, you might want to save the current file or project path
+                end
+
                 table.insert(windowData, windowInfo)
                 logger.d("Saved window: " .. win:title() .. " from app: " .. appName)
             else
@@ -111,7 +119,7 @@ local function saveWindowPositions()
     end
 end
 
--- Restores window positions and reopens Chrome/VS Code windows as needed.
+-- Restores window positions and reopens Chrome/VS Code/Cursor IDE windows as needed.
 local function restoreWindowPositions()
     local windowData = hs.json.read(configFile)
     if not windowData then
@@ -139,7 +147,6 @@ local function restoreWindowPositions()
 
         -- Special handling for Google Chrome:
         if appName == "Google Chrome" and info.URLs and #info.URLs > 0 then
-            -- For Chrome we open a new window with the stored URLs.
             local chromeScript = [[
                 tell application "Google Chrome"
                     set newWindow to make new window
@@ -171,6 +178,11 @@ local function restoreWindowPositions()
             else
                 logger.e("Failed to open project path in Visual Studio Code: " .. info.ProjectPath)
             end
+
+        -- Special handling for Cursor IDE
+        elseif appName == "Cursor" then
+            -- Add any specific restoration logic for Cursor IDE
+            -- For example, you might want to open a specific file or project
         end
 
         -- Try to restore the window position of any matching window.
@@ -262,4 +274,3 @@ else
     logger.i("HTTP command server configured on port 8888; no start() method found, assuming auto-start")
 end
 ]]--
-
