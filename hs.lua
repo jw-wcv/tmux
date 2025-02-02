@@ -1,4 +1,4 @@
--- fileName: init.lua
+-- fileName: init.lua (HAMMERSPOON)
 
 ------------------------------------------------------------
 -- Configuration and Logger

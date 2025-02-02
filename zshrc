@@ -36,6 +36,7 @@ alias gp='git push'
 alias update='brew update && brew upgrade'
 alias cls='clear'
 alias dev='cd ~/Documents/Projects'
+alias ss='asciiquarium'
 
 
 echo "[$(date)] - Aliases loaded" >> "$LOG_FILE"

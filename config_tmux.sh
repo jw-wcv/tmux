@@ -32,6 +32,8 @@ arch -arm64 brew install kubectl
 arch -arm64 brew install ctop
 arch -arm64 brew install pyenv pyenv-virtualenv
 arch -arm64 brew install openssl readline zlib xz
+arch -arm64 brew install asciiquarium
+arch -arm64 brew install vtop
 
 
 
